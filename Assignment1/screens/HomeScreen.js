@@ -16,68 +16,6 @@ export default class HomeScreen extends React.Component {
   constructor(){
     super();
     this.state={
-      quizQuestions = [
-        {
-            type: "text",
-            text: "How much can a loggerhead weigh?",
-            answers: [
-                {
-                    answer: "Up to 20kg"
-                },
-                {
-                    answer: "Up to 115kg"
-                },
-                {
-                    answer: "Waseem"
-                },
-                {
-                    answer: "Up to 500kg"
-                }
-            ],
-            selected: null,
-            correctAnswers: "Waseem"
-        },
-        {
-            type: "text",
-            text: "Where does the Kemp's Ridley Sea Turtle live?'",
-            answers: [
-                {
-                    answer: "Tropical waters all around the world"
-                },
-                {
-                    answer: "Pakistan"
-                },
-                {
-                    answer: "Coastal North Atlantic"
-                },
-                {
-                    answer: "South pacific islands"
-                }
-            ],
-            selected: null,
-            correctAnswers: "Pakistan"
-        },
-        {
-            type: "text",
-            text: "What is the typical lifespan of a Green Sea Turtle?",
-            answers: [
-                {
-                    answer: "150 years"
-                },
-                {
-                    answer: "10 years"
-                },
-                {
-                    answer: "80 years"
-                },
-                {
-                    answer: "True"
-                }
-            ],
-            selected: null,
-            correctAnswers: "True"
-        }
-      ]
       
     }
   }
@@ -89,15 +27,30 @@ export default class HomeScreen extends React.Component {
   //   this.buildquiz();
   // }
   buildquiz(){
-  quizQuestions.map((data,i)=>{
-    var question=`<h6>${data.text}</h6>`;
-
-    data.answers.map(value=>{
-        var answer=`<input type="radio" name="${"q"+i}" value="${value.answer}">${value.answer}`;
-
+    fetch('https://opentdb.com/api.php?amount=10&category=9&difficulty=easy').then(function(res){
+      return res.json()
+    }).then(function(res){
+      console.log(res.results)
+      // image.remove();
+      for(var i = 0; i < res.results.length; i++){
+        var paragraph = document.createElement('p');
+        quizForm.innerHTML+=`${score+1} ${res.results[i].question} </br>`;
+        // paragraph.innerHTML = res.results[i].question;
+        var incorrectanswers=res.results[i].incorrect_answers;
+        // console.log("test",res.results[i].incorrect_answers);
+        for(var a=0;a<3;a++){
+          console.log(res.results[i].incorrect_answers[a]);
+         
+            
+            quizForm.innerHTML+=`<input type ="radio" value="${res.results[i].incorrect_answers[a]}"> ${res.results[i].incorrect_answers[a]}</br>`;
+            
+          }
+          quizForm.innerHTML+=`<input type ="radio" value="${res.results[i].correct_answer}"> ${res.results[i].correct_answer}</br>`;
+      score++;
+      }
     })
-  })
-}
+    }
+
 
   render() {
     return (
